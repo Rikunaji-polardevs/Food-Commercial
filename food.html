@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodMarket Neon - Toko Makanan Online</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS Reset Dasar --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        /* TEMA GELAP NEON */
+        body { background-color: #0a0a12; color: #e0e0e0; line-height: 1.6; overflow-x: hidden; }
+
+        /* --- STYLING NAVBAR --- */
+        header {
+            background: rgba(10, 10, 18, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            padding: 0 20px; box-shadow: 0 4px 30px rgba(0, 255, 255, 0.1);
+            position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        }
+        .navbar { display: flex; justify-content: space-between; align-items: center; height: 80px; max-width: 1200px; margin: 0 auto; }
+        
+        /* Logo Neon */
+        .logo { color: #00ffff; font-size: 28px; font-weight: 700; letter-spacing: -1px; text-shadow: 0 0 10px rgba(0, 255, 255, 0.8); }
+        .logo span { color: #ff00ff; text-shadow: 0 0 10px rgba(255, 0, 255, 0.8); }
+        
+        .menu { list-style: none; display: flex; gap: 5px; }
+        .menu > li { position: relative; }
+        .menu a {
+            color: #fff; text-decoration: none; padding: 10px 18px; display: block;
+            border-radius: 8px; transition: all 0.3s ease; font-weight: 500; font-size: 15px;
+        }
+        .menu a:hover { 
+            background-color: rgba(0, 255, 255, 0.1); color: #00ffff; 
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3); text-shadow: 0 0 5px #00ffff; 
+        }
+        
+        /* Highlight Keranjang Neon */
+        #cart-nav { 
+            background: transparent; color: #ff00ff; border: 1px solid #ff00ff; 
+            border-radius: 20px; font-weight: 600; padding: 10px 20px; 
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.4); 
+        }
+        #cart-nav:hover { background: #ff00ff; color: #fff; box-shadow: 0 0 20px #ff00ff; transform: scale(1.05); }
+
+        /* Submenu Neon */
+        .submenu {
+            display: none; position: absolute; top: 100%; left: 0; background: #111;
+            list-style: none; min-width: 200px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            border-radius: 12px; overflow: hidden; border: 1px solid #00ffff;
+        }
+        .submenu a { padding: 12px 20px; border-bottom: 1px solid #222; font-weight: 400; }
+        .menu > li:hover .submenu { display: block; animation: slideUp 0.3s ease forwards; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            background: linear-gradient(rgba(10,10,18,0.8), rgba(10,10,18,0.6)), url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3133?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            height: 550px; display: flex; align-items: center; justify-content: center; text-align: center; color: white; padding: 0 20px;
+        }
+        .hero-content h1 { font-size: 56px; font-weight: 700; margin-bottom: 15px; text-shadow: 0 0 20px #00ffff; letter-spacing: -1px; color: #fff; }
+        .hero-content p { font-size: 20px; font-weight: 300; margin-bottom: 35px; opacity: 0.9; text-shadow: 0 0 5px #fff; }
+        
+        .cta-button {
+            display: inline-block; background: transparent; color: #00ffff; padding: 16px 45px; text-decoration: none;
+            border: 2px solid #00ffff; border-radius: 50px; font-size: 16px; font-weight: 600; transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5), inset 0 0 10px rgba(0, 255, 255, 0.5);
+            animation: pulse-neon 2s infinite;
+        }
+        .cta-button:hover { background: #00ffff; color: #000; box-shadow: 0 0 30px #00ffff; animation: none; transform: translateY(-3px); }
+
+        @keyframes pulse-neon {
+            0% { transform: scale(0.95); box-shadow: 0 0 10px rgba(0, 255, 255, 0.5); }
+            50% { transform: scale(1); box-shadow: 0 0 25px rgba(0, 255, 255, 1); }
+            100% { transform: scale(0.95); box-shadow: 0 0 10px rgba(0, 255, 255, 0.5); }
+        }
+
+        /* --- STYLING KONTEN UTAMA --- */
+        main { max-width: 1200px; margin: -40px auto 0; padding: 0 20px 60px; position: relative; z-index: 10; }
+
+        /* --- FORM PENDAFTARAN NEON --- */
+        .form-section { 
+            background: #12121a; padding: 40px; border-radius: 24px; margin-bottom: 80px; max-width: 600px; margin-left: auto; margin-right: auto;
+            border: 1px solid rgba(255, 0, 255, 0.3); box-shadow: 0 0 30px rgba(255, 0, 255, 0.15);
+        }
+        .form-section h2 { margin-bottom: 30px; text-align: center; color: #fff; font-size: 28px; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .form-section h2 span { color: #ff00ff; text-shadow: 0 0 15px #ff00ff; }
+        .form-group { margin-bottom: 20px; }
+        .form-group input { 
+            width: 100%; padding: 16px 20px; background-color: #0a0a12; border: 1px solid #333; 
+            border-radius: 12px; font-size: 15px; color: #00ffff; transition: all 0.3s ease; 
+        }
+        .form-group input:focus { outline: none; border-color: #ff00ff; box-shadow: 0 0 15px rgba(255, 0, 255, 0.3); }
+        button[type="submit"] { 
+            width: 100%; padding: 16px; background: transparent; color: #ff00ff; border: 2px solid #ff00ff; 
+            border-radius: 12px; font-size: 16px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; margin-top: 10px;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.2);
+        }
+        button[type="submit"]:hover { background: #ff00ff; color: #fff; box-shadow: 0 0 20px #ff00ff; transform: translateY(-2px); }
+
+        /* --- STYLING PRODUK NEON --- */
+        .products-title {
+            text-align: center; margin-bottom: 40px; font-size: 36px; font-weight: 700; text-transform: uppercase;
+            background: linear-gradient(270deg, #00ffff, #ff00ff, #00ffcc, #00ffff);
+            background-size: 400% 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: gradient-text 5s ease infinite; text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes gradient-text { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        
+        .product-card { 
+            background: #151522; border-radius: 24px; padding-bottom: 25px; 
+            border: 1px solid rgba(0, 255, 255, 0.2); box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); 
+            transition: all 0.4s ease; position: relative; display: flex; flex-direction: column; overflow: hidden;
+        }
+        .product-card:hover { 
+            transform: translateY(-10px); border-color: #00ffff; 
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.4), inset 0 0 10px rgba(0, 255, 255, 0.1); 
+        }
+
+        .badge {
+            position: absolute; top: 20px; right: 20px; background: #ff00ff; color: white; padding: 6px 14px;
+            border-radius: 20px; font-size: 12px; font-weight: 600; z-index: 2; box-shadow: 0 0 15px #ff00ff;
+            animation: float-badge 2s ease-in-out infinite;
+        }
+        @keyframes float-badge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+        .card-img-wrapper { width: 100%; height: 220px; overflow: hidden; border-radius: 24px 24px 0 0; position: relative; }
+        .product-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; opacity: 0.85; }
+        .product-card:hover img { transform: scale(1.15) rotate(2deg); opacity: 1; filter: contrast(1.2); }
+        
+        .card-content { padding: 25px 20px 0; flex-grow: 1; display: flex; flex-direction: column; }
+        .product-card h3 { font-size: 20px; margin-bottom: 8px; color: #fff; font-weight: 600; text-shadow: 0 0 5px rgba(255,255,255,0.3); }
+        .product-desc { font-size: 14px; color: #aaa; margin-bottom: 20px; line-height: 1.6; flex-grow: 1; }
+        .product-price { font-size: 22px; font-weight: 700; color: #00ffff; margin-bottom: 20px; text-shadow: 0 0 10px rgba(0,255,255,0.5); }
+        
+        .btn-beli {
+            background: transparent; color: #00ffff; border: 2px solid #00ffff; padding: 12px 0;
+            width: calc(100% - 40px); margin: 0 auto; border-radius: 12px; font-size: 15px;
+            font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-align: center; 
+            box-shadow: 0 0 10px rgba(0,255,255,0.2);
+        }
+        .btn-beli:hover { background: #00ffff; color: #000; box-shadow: 0 0 20px #00ffff; }
+
+        /* --- NOTIFIKASI TOAST --- */
+        .toast-notification {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            color: #fff; padding: 16px 32px; border-radius: 50px; font-weight: 600; 
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 9999;
+            display: flex; align-items: center; gap: 10px; text-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+        .toast-notification.tampil { bottom: 40px; }
+
+        /* --- MODAL KONFIRMASI PEMBAYARAN --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 2000; opacity: 0; visibility: hidden; transition: 0.3s;
+        }
+        .modal-overlay.show { opacity: 1; visibility: visible; }
+        
+        .modal-box {
+            background: #111; padding: 35px 30px; border-radius: 24px; text-align: center; 
+            border: 2px solid #ff00ff; box-shadow: 0 0 40px rgba(255, 0, 255, 0.4);
+            transform: translateY(-50px); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 400px; width: 90%; color: #fff;
+        }
+        .modal-overlay.show .modal-box { transform: translateY(0); }
+        
+        .modal-box h3 { font-size: 24px; color: #00ffff; text-shadow: 0 0 10px #00ffff; margin-bottom: 15px; }
+        .modal-box p { color: #ccc; font-size: 15px; margin-bottom: 25px; }
+        #modal-product-name { color: #fff; font-weight: 700; text-shadow: 0 0 5px #fff; font-size: 18px; display: block; margin-top: 5px;}
+        
+        .modal-actions { display: flex; justify-content: space-between; gap: 15px; }
+        
+        .btn-yes {
+            flex: 1; background: transparent; color: #00ff00; border: 2px solid #00ff00;
+            padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+        .btn-yes:hover { background: #00ff00; color: #000; box-shadow: 0 0 25px #00ff00; }
+        
+        .btn-no {
+            flex: 1; background: transparent; color: #ff0044; border: 2px solid #ff0044;
+            padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 0 10px rgba(255, 0, 68, 0.3);
+        }
+        .btn-no:hover { background: #ff0044; color: #fff; box-shadow: 0 0 25px #ff0044; }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .hero-content h1 { font-size: 40px; }
+            .navbar { flex-direction: column; gap: 15px; height: auto; padding: 20px 0; }
+            .menu { flex-wrap: wrap; justify-content: center; }
+            main { margin-top: -20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="logo">Food<span>Market</span></div>
+            <ul class="menu">
+                <li>
+                    <a href="#">Makanan Utama ▾</a>
+                    <ul class="submenu">
+                        <li><a href="#">Nasi & Burger</a></li>
+                        <li><a href="#">Mie & Pasta</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Camilan ▾</a>
+                    <ul class="submenu">
+                        <li><a href="#">Keripik</a></li>
+                        <li><a href="#">Dimsum</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Promo 🎉</a></li>
+                <li><a href="#" id="cart-nav">Keranjang 🛒 (<span id="cart-count">0</span>)</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Lapar? Kami Antar!</h1>
+            <p>Sistem Pemesanan Futuristik. Cepat, Terjangkau, dan Cyber-Delicious.</p>
+            <a href="#products" class="cta-button">Eksplor Menu</a>
+        </div>
+    </section>
+
+    <main>
+        <section class="form-section">
+            <h2>Registrasi <span>User</span></h2>
+            <form action="#" method="POST">
+                <div class="form-group"><input type="text" placeholder="Nama Lengkap" required></div>
+                <div class="form-group"><input type="email" placeholder="Alamat Email" required></div>
+                <div class="form-group"><input type="password" placeholder="Password" required></div>
+                <button type="submit">Akses Sistem</button>
+            </form>
+        </section>
+
+        <h2 class="products-title" id="products">⚡ Modul Produk Terlaris ⚡</h2>
+        
+        <div class="product-grid">
+            <div class="product-card">
+                <span class="badge">Terlaris</span>
+                <div class="card-img-wrapper"><img src="https://dcostseafood.id/wp-content/uploads/2023/04/Nasi-Goreng-telor.jpg" alt="Nasi Goreng Spesial" loading="lazy"></div>
+                <div class="card-content">
+                    <h3>Nasi Goreng Spesial</h3>
+                    <p class="product-desc">Nasi goreng dengan bumbu rahasia, telur mata sapi, ayam suwir, dan kerupuk udang.</p>
+                    <div class="product-price">Rp 25.000</div>
+                </div>
+                <button class="btn-beli">Pesan Sekarang</button>
+            </div>
+
+            <div class="product-card">
+                <div class="card-img-wrapper"><img src="https://img.okezone.com/content/2019/05/04/298/2051609/yuk-buat-ayam-geprek-pedas-cocok-untuk-buka-puasa-bareng-keluarga-z1VHhnEl4n.jpg" alt="Ayam Geprek Pedas" loading="lazy"></div>
+                <div class="card-content">
+                    <h3>Ayam Geprek Pedas</h3>
+                    <p class="product-desc">Ayam crispy dengan sambal bawang pedas menggigit. Bisa request level kepedasan!</p>
+                    <div class="product-price">Rp 22.000</div>
+                </div>
+                <button class="btn-beli">Pesan Sekarang</button>
+            </div>
+
+            <div class="product-card">
+                <span class="badge">Diskon 10%</span>
+                <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" alt="Cyber Burger" loading="lazy"></div>
+                <div class="card-content">
+                    <h3>Cyber Beef Burger</h3>
+                    <p class="product-desc">Burger daging sapi lumer dengan keju mozarella ekstra dan saus rahasia.</p>
+                    <div class="product-price">Rp 35.000</div>
+                </div>
+                <button class="btn-beli">Pesan Sekarang</button>
+            </div>
+
+            <div class="product-card">
+                <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=600&q=80" alt="Pizza Peperoni" loading="lazy"></div>
+                <div class="card-content">
+                    <h3>Pizza Peperoni</h3>
+                    <p class="product-desc">Pizza tipis renyah ala Italia dengan topping peperoni sapi yang melimpah.</p>
+                    <div class="product-price">Rp 55.000</div>
+                </div>
+                <button class="btn-beli">Pesan Sekarang</button>
+            </div>
+
+            <div class="product-card">
+                <span class="badge">Baru</span>
+                <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?auto=format&fit=crop&w=600&q=80" alt="Mie Goreng Seafood" loading="lazy"></div>
+                <div class="card-content">
+                    <h3>Mie Goreng Seafood</h3>
+                    <p class="product-desc">Mie goreng gurih dengan topping udang, cumi, dan sayuran segar pilihan.</p>
+                    <div class="product-price">Rp 30.000</div>
+                </div>
+                <button class="btn-beli">Pesan Sekarang</button>
+            </div>
+
+            <div class="product-card">
+                <div class="card-img-wrapper"><img src="https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/cbb9992a-cdad-438c-b34e-bbdbf8ad0710_Go-Biz_20250327_130709.jpeg" alt="Dimsum Mentai" loading="lazy"></div>
+                <div class="card-content">
+                    <h3>Dimsum Mentai</h3>
+                    <p class="product-desc">Dimsum ayam udang lembut yang dibakar dengan saus mentai gurih di atasnya.</p>
+                    <div class="product-price">Rp 20.000</div>
+                </div>
+                <button class="btn-beli">Pesan Sekarang</button>
+            </div>
+
+            <div class="product-card">
+                <div class="card-img-wrapper"><img src="https://img-global.cpcdn.com/recipes/859eba211e3937ad/1200x630cq80/photo.jpg" alt="Keripik Singkong" loading="lazy"></div>
+                <div class="card-content">
+                    <h3>Keripik Singkong</h3>
+                    <p class="product-desc">Keripik singkong premium dengan bumbu balado autentik. Renyah dan gurih!</p>
+                    <div class="product-price">Rp 15.000</div>
+                </div>
+                <button class="btn-beli">Pesan Sekarang</button>
+            </div>
+
+            <div class="product-card">
+                <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1576107232684-1279f390859f?auto=format&fit=crop&w=600&q=80" alt="Kentang Goreng" loading="lazy"></div>
+                <div class="card-content">
+                    <h3>Kentang Goreng Truffle</h3>
+                    <p class="product-desc">Kentang goreng renyah dengan aroma truffle oil dan taburan parmesan.</p>
+                    <div class="product-price">Rp 18.000</div>
+                </div>
+                <button class="btn-beli">Pesan Sekarang</button>
+            </div>
+
+            <div class="product-card">
+                <span class="badge">Diskon 20%</span>
+                <div class="card-img-wrapper"><img src="https://i0.wp.com/sepucukjambi.id/wp-content/uploads/2026/01/WhatsApp-Image-2026-01-15-at-11.23.30.jpeg?fit=1200%2C800&ssl=1" alt="Es Teh Manis" loading="lazy"></div>
+                <div class="card-content">
+                    <h3>Es Teh Manis Jumbo</h3>
+                    <p class="product-desc">Es teh manis segar dengan gula aren asli. Pendingin terbaik untuk hari panas!</p>
+                    <div class="product-price">Rp 8.000</div>
+                </div>
+                <button class="btn-beli">Pesan Sekarang</button>
+            </div>
+            
+            <div class="product-card">
+                <div class="card-img-wrapper">
+                    <img src="https://healtheroes.id/wp-content/uploads/2024/07/2011231700456177655ae6f14a1f7.jpg" alt="Kopi Susu Gula Aren" loading="lazy">
+                </div>
+                <div class="card-content">
+                    <h3>Kopi Susu Aren</h3>
+                    <p class="product-desc">Kopi susu premium dengan gula aren asli. Aromatik dan creamy!</p>
+                    <div class="product-price">Rp 18.000</div>
+                </div>
+                <button class="btn-beli">Pesan Sekarang</button>
+            </div>
+
+            <div class="product-card">
+                <span class="badge">Baru</span>
+                <div class="card-img-wrapper">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSod7vrnu_dMXUWO0g1Rh1WGZ9aDPHkzKX_-g&s" alt="Boba Brown Sugar" loading="lazy">
+                </div>
+                <div class="card-content">
+                    <h3>Boba Brown Sugar</h3>
+                    <p class="product-desc">Susu segar dengan sirup brown sugar yang kental dan boba super kenyal.</p>
+                    <div class="product-price">Rp 20.000</div>
+                </div>
+                <button class="btn-beli">Pesan Sekarang</button>
+            </div>
+
+            <div class="product-card">
+                <div class="card-img-wrapper">
+                    <img src="https://cdn.loveandlemons.com/wp-content/uploads/2023/06/iced-matcha-latte.jpg" alt="Matcha Latte" loading="lazy">
+                </div>
+                <div class="card-content">
+                    <h3>Iced Matcha Latte</h3>
+                    <p class="product-desc">Paduan teh hijau matcha murni dari Jepang dengan susu yang super lembut.</p>
+                    <div class="product-price">Rp 22.000</div>
+                </div>
+                <button class="btn-beli">Pesan Sekarang</button>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="payment-modal" class="modal-overlay">
+        <div class="modal-box">
+            <h3>Konfirmasi Order</h3>
+            <p>Apakah Anda yakin ingin melakukan pembayaran untuk:</p>
+            <span id="modal-product-name">Nama Produk</span>
+            <div class="modal-actions">
+                <button id="btn-no" class="btn-no">Batal (✖)</button>
+                <button id="btn-yes" class="btn-yes">Ya, Bayar (✔)</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast-notification">
+        <span id="toast-message">Status Pesan</span>
+    </div>
+
+    <script>
+        let totalItems = 0;
+        const cartCountText = document.getElementById('cart-count');
+        const toastBox = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+        const buttonsBeli = document.querySelectorAll('.btn-beli');
+        
+        // Modal Elements
+        const modal = document.getElementById('payment-modal');
+        const btnYes = document.getElementById('btn-yes');
+        const btnNo = document.getElementById('btn-no');
+        const modalProductName = document.getElementById('modal-product-name');
+        
+        // Simpan data produk yang sedang diklik
+        let selectedProduct = "";
+        let selectedButton = null;
+
+        // 1. Saat tombol Pesan diklik, munculkan modal
+        buttonsBeli.forEach(button => {
+            button.addEventListener('click', function() {
+                const card = this.closest('.product-card');
+                selectedProduct = card.querySelector('h3').innerText;
+                selectedButton = this; // Simpan elemen tombol yang diklik
+                
+                modalProductName.innerText = selectedProduct;
+                modal.classList.add('show');
+            });
+        });
+
+        // 2. Jika user pilih "Ya, Bayar" (Sukses)
+        btnYes.addEventListener('click', function() {
+            modal.classList.remove('show'); // Tutup modal
+            
+            // Ubah gaya tombol produk jadi neon hijau
+            const originalText = selectedButton.innerText;
+            selectedButton.innerHTML = "Sukses ✔️";
+            selectedButton.style.background = "#00ff00";
+            selectedButton.style.borderColor = "#00ff00";
+            selectedButton.style.color = "#000";
+            selectedButton.style.boxShadow = "0 0 20px #00ff00";
+
+            setTimeout(() => {
+                selectedButton.innerHTML = originalText;
+                selectedButton.style.background = "transparent";
+                selectedButton.style.borderColor = "#00ffff";
+                selectedButton.style.color = "#00ffff";
+                selectedButton.style.boxShadow = "0 0 10px rgba(0,255,255,0.2)";
+            }, 2000);
+
+            // Tambah angka keranjang
+            totalItems++;
+            cartCountText.innerText = totalItems;
+            
+            // Efek membesar di icon keranjang
+            const cartNav = document.getElementById('cart-nav');
+            cartNav.style.transform = "scale(1.1)";
+            setTimeout(() => cartNav.style.transform = "scale(1)", 300);
+
+            // Munculkan Toast Sukses (Hijau Neon)
+            showToast("✅ SUKSES! " + selectedProduct + " berhasil dibayar.", "#00ff00", "#000", "0 0 20px #00ff00");
+        });
+
+        // 3. Jika user pilih "Batal" (Cancel)
+        btnNo.addEventListener('click', function() {
+            modal.classList.remove('show'); // Tutup modal
+            
+            // Munculkan Toast Cancel (Merah Neon)
+            showToast("❌ CANCEL! Pembayaran " + selectedProduct + " dibatalkan.", "#ff0044", "#fff", "0 0 20px #ff0044");
+        });
+
+        // Fungsi bantuan untuk memunculkan Toast dengan warna dinamis
+        function showToast(msg, bgColor, textColor, shadow) {
+            toastMessage.innerText = msg;
+            toastBox.style.background = bgColor;
+            toastBox.style.color = textColor;
+            toastBox.style.boxShadow = shadow;
+            toastBox.classList.add('tampil');
+
+            setTimeout(() => {
+                toastBox.classList.remove('tampil');
+            }, 3000);
+        }
+    </script>
+
+</body>
+</html>
